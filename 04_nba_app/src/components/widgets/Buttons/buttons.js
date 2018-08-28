@@ -19,20 +19,16 @@ const buttons = (props) => {
         case 'linkTo':
             template = (
                 <Link to={props.linkTo}
-                    className={styles.blue_btn} />
+                    className={styles.blue_btn}>
+                    {props.cta}
+                </Link>
+
             )
             break
         default:
             template = null
-        
-        return template
     }
-
-    return(
-        <div>
-
-        </div>
-    )
+    return template
 }
 
 export default buttons
