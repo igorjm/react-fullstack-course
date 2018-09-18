@@ -17,14 +17,14 @@ const Home = () => {
             />
             <NewsList
                 type="card"
-                loadMore={true}
+                loadmore={true}
                 start={3}
                 amount={3}
             />
             <VideosList 
                 type="card"
                 title={true}
-                loardmore={false}
+                loadmore={false}
                 start={0}
                 amount={3}
             />

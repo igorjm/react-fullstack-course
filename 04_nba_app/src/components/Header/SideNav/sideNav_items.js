@@ -39,9 +39,9 @@ const SideNavItems = () => {
         }
     ]
 
-    const showItem = () => {
+    const showItems = () => {
         return items.map( (item,i) => {
-            return(
+            return (
                 <div key={i} className={item.type}>
                     <Link to={item.link}>
                         <FontAwesome name={item.icon}/> 
@@ -54,7 +54,7 @@ const SideNavItems = () => {
 
     return (
         <div>
-            {showItem()}
+            {showItems()}
         </div>
     )
 }
