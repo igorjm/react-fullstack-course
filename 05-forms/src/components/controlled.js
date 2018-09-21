@@ -21,8 +21,6 @@ class Controlled extends Component {
 
     onHandler = (evt) => {
         evt.preventDefault()
-
-
     }
 
     render(){

@@ -1,0 +1,79 @@
+import * as firebase from 'firebase'
+
+const config = {
+    apiKey: "AIzaSyAnT_4pw4bCRMI2uKVCZ0oZ8mrJdx09e_I",
+    authDomain: "forms-test-23799.firebaseapp.com",
+    databaseURL: "https://forms-test-23799.firebaseio.com",
+    projectId: "forms-test-23799",
+    storageBucket: "forms-test-23799.appspot.com",
+    messagingSenderId: "112444804387"
+  };
+
+firebase.initializeApp(config)
+
+const firebaseDB = firebase.database()
+
+//POSTING
+firebaseDB.ref('name').set('igor')
+.then(() => {
+  console.log('saved')
+})
+.catch((e) => {
+  console.log('error', e)
+})
+//OR
+firebaseDB.ref('user').push({
+  name:'Igor',
+  lastname: 'Melo'
+})
+
+//REMOVING
+firebaseDB.ref('name').remove('igor')
+.then(() => {
+  console.log('removed')
+})
+.catch((e) => {
+  console.log('error', e)
+})
+
+//UPDATING
+firebaseDB.ref().update({
+  name: 'other name',
+  car: {
+    brand: 'Renault',
+    year: 2015
+  },
+  'car/brand': 'Fiat'
+})
+.then(() => {
+  console.log('updated')
+})
+.catch((e) => {
+  console.log('error', e)
+})
+
+//GETTING
+firebaseDB.ref().once('value')
+.then((snapshot) => {
+   console.log('getted', snapshot.val())
+})
+.catch((e) => {
+   console.log('error', e)
+})
+//OR
+firebaseDB.ref().on('value', (snapshot) => {
+  console.log(snapshot.val())
+})
+
+//MAKING ARRANY WITH THE RETURNED database
+firebaseDB.ref('users').once('value')
+.then((snapshot) => {
+  const users = []
+
+  snapshot.forEach((childSnapshot) => {
+    users.push({
+      id: childSnapshot.key,
+      name: childSnapshot.val().name
+    })
+  })
+})
