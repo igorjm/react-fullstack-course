@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './signin.css'
+import {firebase} from '../../firebase'
 
 import FormField from '../widgets/FormFields/formFields'
 
@@ -113,11 +114,33 @@ class SignIn extends Component {
                     loading: true,
                     registerError: ''
                 })
-                
+
                 if(type) {
-
+                    firebase.auth()
+                    .signInWithEmailAndPassword(
+                        dataToSubmit.email,
+                        dataToSubmit.password  
+                    ).then(() => {
+                        this.props.history.push('/')
+                    }).catch(error => {
+                        this.setState({
+                            loading: false,
+                            registerError: error.message
+                        })
+                    })
                 } else {
-
+                    firebase.auth()
+                    .createUserWithEmailAndPassword(
+                        dataToSubmit.email,
+                        dataToSubmit.password
+                    ).then(() => {
+                        this.props.history.push('/')
+                    }).catch(error => {
+                        this.setState({
+                            loading: false,
+                            registerError: error.message
+                        })
+                    })
                 }
             }
         }
@@ -133,6 +156,12 @@ class SignIn extends Component {
                 <button onClick={(event) => this.submitForm(event, true)}>Log in</button>
             </div>
     )
+
+    showError = () => {
+        this.state.registerError !== '' ?
+            <div className={styles.error}>{this.state.registerError}</div>
+        : ''
+    }
 
     render() {
         return (
@@ -152,7 +181,7 @@ class SignIn extends Component {
                     />
 
                     {this.submitButton()}
-
+                    {this.showError()}
                 </form>
             </div>
         )
