@@ -157,11 +157,11 @@ class SignIn extends Component {
             </div>
     )
 
-    showError = () => {
+    showError = () => (
         this.state.registerError !== '' ?
             <div className={styles.error}>{this.state.registerError}</div>
         : ''
-    }
+    )
 
     render() {
         return (

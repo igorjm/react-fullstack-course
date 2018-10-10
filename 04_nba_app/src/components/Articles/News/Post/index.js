@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {firebaseDB, firebaseLooper, firebaseTeams} from '../../../../firebase'
+import {firebase, firebaseDB, firebaseLooper, firebaseTeams} from '../../../../firebase'
 
 import styles from '../../articles.css'
 import Header from './header'
@@ -8,7 +8,8 @@ class NewsArticle extends Component {
 
     state ={
         article: [],
-        team: []
+        team: [],
+        imageURL: ''
     }
 
     componentWillMount() {
@@ -23,6 +24,8 @@ class NewsArticle extends Component {
                     article,
                     team
                 })
+
+                this.getImageURL(article.image)
             })
         })
        
@@ -37,6 +40,16 @@ class NewsArticle extends Component {
         //         })
         //     })
         // })
+    }
+
+    getImageURL = (filename) => {
+        firebase.storage().ref('images')
+        .child(filename).getDownloadURL()
+        .then( url => {
+            this.setState({
+                imageURL: url
+            })
+        })
     }
 
     render() {
@@ -54,11 +67,15 @@ class NewsArticle extends Component {
                     <h1>{article.title}</h1>
                     <div className={styles.articleImage}
                         style={{
-                            background: `url('/images/articles/${article.image}')`
+                            background: `url('${this.state.imageUrl}')`
                         }}
                     >
                     </div>
-                    <div className={styles.articleText}>
+                    <div className={styles.articleText}
+                        dangerouslySetInnerHTML = {{
+                            __html:article.body
+                        }}
+                    >
                         {article.body}
                     </div>
                 </div>

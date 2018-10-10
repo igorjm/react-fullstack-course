@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import styles from './dashboard.css'
-import { firebaseTeams } from '../../firebase'
+import { firebaseTeams, firebaseArticles, firebase } from '../../firebase'
 
 import FormField from '../widgets/FormFields/formFields'
 import Uploader from '../widgets/FileUploader/fileUploader'
 
 import { Editor } from 'react-draft-wysiwyg'
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { EditorState } from 'draft-js'
+// import { convertFromRaw, convertToRaw } from 'draft-js'
 import { stateToHTML} from 'draft-js-export-html'
 
 class Dashboard extends Component {
@@ -157,7 +158,33 @@ class Dashboard extends Component {
         }
 
         if(formIsValid) {
-            
+            this.setState({
+                loading: true,
+                postError: ''
+            })
+
+            firebaseArticles.orderByChild("id")
+            .limitToLast(1).once('value')
+            .then( snapshot => {
+                let articleId = 0
+
+                snapshot.forEach( childSnapshot => {
+                    articleId = childSnapshot.val().id
+                })
+
+                dataToSubmit['date'] = firebase.database.ServerValue.TIMESTAMP
+                dataToSubmit['id'] = articleId + 1
+                dataToSubmit['team'] = parseInt(dataToSubmit['team'], 10)
+
+                firebaseArticles.push(dataToSubmit)
+                .then( article => {
+                    this.props.history.push(`/articles/${article.key}`)
+                }).catch( e => {
+                    this.setState({
+                        postError: e.message
+                    })
+                })
+            })
         } else {
             this.setState({
                 postError: 'Something went wrong!'
@@ -174,15 +201,15 @@ class Dashboard extends Component {
             </div>
     )
 
-    showError = () => {
+    showError = () => (
         this.state.postError !== '' ?
             <div className={styles.error}>{this.state.postError}</div>
         : ''
-    }
+    )
 
     onEditorStateChange = (editorState) => {
         let contentState = editorState.getCurrentContent()
-        let rawState = convertToRaw(contentState)
+        // let rawState = convertToRaw(contentState)
         let html = stateToHTML(contentState)
         
         this.updateForm({id:'body'}, html)
