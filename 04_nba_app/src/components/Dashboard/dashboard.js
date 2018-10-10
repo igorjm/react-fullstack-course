@@ -51,7 +51,7 @@ class Dashboard extends Component {
                 value: '',
                 valid: true
             },
-            teams: {
+            team: {
                 element: 'select',
                 value: '',
                 config: {
@@ -80,20 +80,20 @@ class Dashboard extends Component {
     loadTeams = () => {
         firebaseTeams.once('value')
         .then((snapshot) => {
-            let teams = []
+            let team = []
 
             snapshot.forEach((childSnapshot) => {
-                teams.push({
+                team.push({
                     id: childSnapshot.val().teamId,
                     name: childSnapshot.val().city
                 })
             })
 
             const newFormdata = {...this.state.formdata}
-            const newElement = {...newFormdata['teams']}
+            const newElement = {...newFormdata['team']}
 
-            newElement.config.options = teams
-            newFormdata['teams'] = newElement
+            newElement.config.options = team
+            newFormdata['team'] = newElement
 
             this.setState({
                 formdata: newFormdata
@@ -221,13 +221,13 @@ class Dashboard extends Component {
                     <Editor
                         editorState = {this.state.editorState}
                         wrapperClassName = "myEditor-wrapper"
-                        editorclassName = "myEditor-editor" 
+                        editorClassName = "myEditor-editor" 
                         onEditorStateChange = {this.onEditorStateChange}
                     />
 
                     <FormField
-                        id={'teams'}
-                        formdata={this.state.formdata.teams}
+                        id={'team'}
+                        formdata={this.state.formdata.team}
                         change={(element) => this.updateForm(element)}
                     />
 
