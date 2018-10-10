@@ -166,7 +166,7 @@ class Dashboard extends Component {
             firebaseArticles.orderByChild("id")
             .limitToLast(1).once('value')
             .then( snapshot => {
-                let articleId = 0
+                let articleId = null
 
                 snapshot.forEach( childSnapshot => {
                     articleId = childSnapshot.val().id
