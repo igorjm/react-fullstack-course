@@ -2,7 +2,7 @@ import React from 'react'
 
 import ArtistContainer from '../containers/artist_container'
 
-const Artist = () => {
+const Artist = (props) => {
     return (
         <ArtistContainer {...props}/>
     )
