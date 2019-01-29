@@ -1,0 +1,13 @@
+<script src="https://cdnjs.com/libraries/jquery"></script>
+
+<script>
+    $.ajax({
+        type:"POST",
+        url:"/enteruser_post",
+        data: JSON.stringify({
+            firstname: 'Igor',
+            lastname: 'Melo'
+        }),
+        contentType:"application/json"
+    })
+</script>
