@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const SALT_I = 10
 
 const userSchema = mongoose.Schema({
@@ -9,10 +10,13 @@ const userSchema = mongoose.Schema({
         trim: true,
         unique: 1
     },
-    psasword: {
+    password: {
         type: String,
         required: true,
         minlength: 6
+    },
+    token: {
+        type: String
     }
 })
 
@@ -41,6 +45,29 @@ userSchema.methods.comparePassword = function(candidatePassword, callback) {
         callback(null, isMatch)
     })
 
+}
+
+userSchema.methods.generateToken = function(callback) {
+    var user = this
+    var token = jwt.sign(user._id.toHexString(), 'supersecret')
+
+    user.token = token
+    user.save(function(err, user) {
+        if(err) return callback(err)
+        callback(null, user)
+    })
+}
+
+userSchema.statics.findByToken = function(token, callback) {
+    const user = this
+
+    jwt.verify(token, 'supersecret', function(err, decode) {
+
+        user.findOne({"_id": decode, "token": token}, function(err, user) {
+            if(err) return callback(err)
+            callback(null, user)
+        })
+    })
 }
 
 const User = mongoose.model('User', userSchema)
