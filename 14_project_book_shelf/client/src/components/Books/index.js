@@ -12,7 +12,7 @@ class BookView extends Component {
         this.props.dispatch(clearBookWithReviewer())
     }
 
-    renderBook = (books) => {
+    renderBook = (books) => (
         books.book ? 
             <div className="br_container">
                 <div className="br_header">
@@ -41,7 +41,7 @@ class BookView extends Component {
                 </div>
             </div>
         : null
-    }
+    )
     
     render() {
         let books = this.props.books

@@ -5,7 +5,7 @@ export function getBooks(
     start = 0,
     order = 'asc',
     list = ''
-) {
+){
     const request = axios.get(`/api/books?limit=${limit}&skip=${start}&order=${order}`)
                     .then(response => {
                             if(list) {
